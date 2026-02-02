@@ -128,11 +128,8 @@ const LoginPage = () => {
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
               >
-                <CardTitle className="text-2xl text-gray-900">Assignment 1</CardTitle>
+                <CardTitle className="text-2xl text-gray-900">Login Page</CardTitle>
               </motion.div>
-              <CardDescription className="text-gray-500">
-                Login Servlet - Password Validation
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <AnimatePresence mode="wait">
