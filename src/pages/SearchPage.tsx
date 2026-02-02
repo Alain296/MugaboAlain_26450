@@ -46,10 +46,12 @@ const GoogleSearchPage = () => {
     setIsLoading(true);
     
     // Simulate servlet processing delay (like GoogleSearchServlet.java)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-    setSearchedName(name);
-    setShowResult(true);
+    // Automatically redirect to Google (simulating sendRedirect)
+    const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(name)}`;
+    window.open(googleUrl, '_blank');
+    
     setIsLoading(false);
   };
 
