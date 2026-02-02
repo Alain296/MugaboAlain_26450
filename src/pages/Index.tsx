@@ -168,9 +168,9 @@ const Index = () => {
                 >
                   <Search className="w-6 h-6 text-emerald-400" />
                 </motion.div>
-                <CardTitle className="text-white text-xl">Assignment 2</CardTitle>
+                <CardTitle className="text-white text-xl">Assignment 2: Send Redirect</CardTitle>
                 <CardDescription className="text-slate-400">
-                  Google Search Servlet
+                  Redirect to Google
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -179,7 +179,7 @@ const Index = () => {
                 </p>
                 <Link to="/search">
                   <Button className="w-full bg-emerald-600 hover:bg-emerald-700 group-hover:shadow-lg group-hover:shadow-emerald-500/25 transition-all duration-300">
-                    <span>Open Search Page</span>
+                    <span>Open Redirect Page</span>
                     <motion.span
                       className="ml-2"
                       initial={{ x: 0 }}
