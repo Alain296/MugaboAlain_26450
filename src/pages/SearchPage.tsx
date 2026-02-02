@@ -97,10 +97,10 @@ const GoogleSearchPage = () => {
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
               >
-                <CardTitle className="text-2xl text-white">Assignment 2</CardTitle>
+                <CardTitle className="text-2xl text-white">Assignment 2: Send Redirect</CardTitle>
               </motion.div>
               <CardDescription className="text-slate-400">
-                Search Your Name on Google
+                Redirect to Google using sendRedirect()
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -152,7 +152,7 @@ const GoogleSearchPage = () => {
                         ) : (
                           <>
                             <Search className="w-4 h-4 mr-2" />
-                            Search
+                            Fetch
                           </>
                         )}
                       </Button>
