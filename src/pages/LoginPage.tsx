@@ -92,13 +92,9 @@ const LoginPage = () => {
     setResult({ type: null, message: "" });
   };
 
-  const passwordStrength = password.length === 0 ? 0 : password.length < 4 ? 1 : password.length < 8 ? 2 : 3;
-  const strengthColors = ["bg-slate-600", "bg-red-500", "bg-amber-500", "bg-emerald-500"];
-  const strengthLabels = ["", "Weak", "Fair", "Strong"];
-
   return (
     <motion.div
-      className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4"
+      className="min-h-screen bg-white flex items-center justify-center p-4"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
@@ -111,7 +107,7 @@ const LoginPage = () => {
         >
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-slate-400 hover:text-white mb-6 transition-colors group"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
           >
             <motion.span whileHover={{ x: -3 }} transition={{ type: "spring", stiffness: 400 }}>
               <ArrowLeft className="w-4 h-4" />
@@ -125,16 +121,16 @@ const LoginPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
         >
-          <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
+          <Card className="bg-white border-gray-200 shadow-lg overflow-hidden">
             <CardHeader className="text-center">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
               >
-                <CardTitle className="text-2xl text-white">Assignment 1</CardTitle>
+                <CardTitle className="text-2xl text-gray-900">Assignment 1</CardTitle>
               </motion.div>
-              <CardDescription className="text-slate-400">
+              <CardDescription className="text-gray-500">
                 Login Servlet - Password Validation
               </CardDescription>
             </CardHeader>
@@ -150,7 +146,7 @@ const LoginPage = () => {
                     animate="visible"
                   >
                     <motion.div className="space-y-2" variants={inputVariants}>
-                      <Label htmlFor="username" className="text-slate-200">
+                      <Label htmlFor="username" className="text-gray-700">
                         Username
                       </Label>
                       <Input
@@ -159,14 +155,14 @@ const LoginPage = () => {
                         placeholder="Enter your username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+                        className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
                         required
                         disabled={isLoading}
                       />
                     </motion.div>
 
                     <motion.div className="space-y-2" variants={inputVariants}>
-                      <Label htmlFor="password" className="text-slate-200">
+                      <Label htmlFor="password" className="text-gray-700">
                         Password
                       </Label>
                       <div className="relative">
@@ -176,48 +172,19 @@ const LoginPage = () => {
                           placeholder="Enter your password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 pr-10 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+                          className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 pr-10 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
                           required
                           disabled={isLoading}
                         />
                         <motion.button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors"
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                         >
                           {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </motion.button>
-                      </div>
-                      
-                      {/* Password strength indicator */}
-                      <div className="space-y-1">
-                        <div className="flex gap-1">
-                          {[1, 2, 3].map((level) => (
-                            <motion.div
-                              key={level}
-                              className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
-                                passwordStrength >= level ? strengthColors[passwordStrength] : "bg-slate-600"
-                              }`}
-                              initial={{ scaleX: 0 }}
-                              animate={{ scaleX: 1 }}
-                              transition={{ delay: level * 0.1 }}
-                            />
-                          ))}
-                        </div>
-                        <p className="text-xs text-slate-500 flex justify-between">
-                          <span>Password must be at least 8 characters for "strong" status</span>
-                          {password.length > 0 && (
-                            <motion.span
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              className={passwordStrength === 3 ? "text-emerald-400" : passwordStrength === 2 ? "text-amber-400" : "text-red-400"}
-                            >
-                              {strengthLabels[passwordStrength]}
-                            </motion.span>
-                          )}
-                        </p>
                       </div>
                     </motion.div>
 
@@ -254,8 +221,8 @@ const LoginPage = () => {
                     <motion.div
                       className={`p-6 rounded-lg ${
                         result.type === "weak"
-                          ? "bg-amber-500/10 border border-amber-500/30"
-                          : "bg-emerald-500/10 border border-emerald-500/30"
+                          ? "bg-amber-50 border border-amber-200"
+                          : "bg-emerald-50 border border-emerald-200"
                       }`}
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
@@ -267,14 +234,14 @@ const LoginPage = () => {
                         transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                       >
                         {result.type === "weak" ? (
-                          <AlertTriangle className="w-12 h-12 text-amber-400 mx-auto mb-4" />
+                          <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
                         ) : (
-                          <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
+                          <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
                         )}
                       </motion.div>
                       <motion.p
                         className={`text-lg font-medium ${
-                          result.type === "weak" ? "text-amber-300" : "text-emerald-300"
+                          result.type === "weak" ? "text-amber-700" : "text-emerald-700"
                         }`}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -291,7 +258,7 @@ const LoginPage = () => {
                       <Button
                         onClick={resetForm}
                         variant="outline"
-                        className="border-slate-600 text-slate-300 hover:bg-slate-700 transition-all duration-200"
+                        className="border-gray-300 text-gray-700 hover:bg-gray-100 transition-all duration-200"
                       >
                         Try Again
                       </Button>
@@ -299,24 +266,6 @@ const LoginPage = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              {/* Servlet Code Reference */}
-              <motion.div
-                className="mt-8 p-4 bg-slate-900/50 rounded-lg border border-slate-700"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                <p className="text-xs text-slate-500 mb-2 font-medium">Equivalent Servlet Logic:</p>
-                <pre className="text-xs text-slate-400 overflow-x-auto">
-{`if (password.length() < 8) {
-  out.println("Hello " + username + 
-    ", your password is weak.");
-} else {
-  out.println("Welcome " + username);
-}`}
-                </pre>
-              </motion.div>
             </CardContent>
           </Card>
         </motion.div>
