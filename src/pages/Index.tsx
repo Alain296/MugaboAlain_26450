@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { LogIn, Palette, Code2, Sparkles } from "lucide-react";
+import { LogIn, Search, Code2, Sparkles } from "lucide-react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -166,20 +166,20 @@ const Index = () => {
                   whileHover={{ rotate: [0, -10, 10, 0] }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Palette className="w-6 h-6 text-emerald-400" />
+                  <Search className="w-6 h-6 text-emerald-400" />
                 </motion.div>
                 <CardTitle className="text-white text-xl">Assignment 2</CardTitle>
                 <CardDescription className="text-slate-400">
-                  Age & Favorite Color Validator
+                  Google Search Servlet
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-slate-300 text-sm mb-6">
-                  A form to collect first name, last name, age, and favorite color. Demonstrates RequestDispatcher.forward() to result.jsp.
+                  A form to enter your name and search on Google. Demonstrates response.sendRedirect() to external URL.
                 </p>
                 <Link to="/search">
                   <Button className="w-full bg-emerald-600 hover:bg-emerald-700 group-hover:shadow-lg group-hover:shadow-emerald-500/25 transition-all duration-300">
-                    <span>Open Validator Page</span>
+                    <span>Open Search Page</span>
                     <motion.span
                       className="ml-2"
                       initial={{ x: 0 }}
