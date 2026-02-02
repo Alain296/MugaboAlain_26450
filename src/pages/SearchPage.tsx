@@ -5,44 +5,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Search, ExternalLink, Loader2, Globe, RotateCcw } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ArrowLeft, Send, Loader2, RotateCcw, User, Palette, Calendar } from "lucide-react";
 
-interface SearchResult {
-  title: string;
-  url: string;
-  description: string;
+interface FormData {
+  firstName: string;
+  lastName: string;
+  age: string;
+  favoriteColor: string;
 }
 
-const generateMockResults = (query: string): SearchResult[] => {
-  const results: SearchResult[] = [
-    {
-      title: `${query} - Wikipedia`,
-      url: `https://en.wikipedia.org/wiki/${encodeURIComponent(query)}`,
-      description: `${query} is a topic with extensive information available. Learn about the history, facts, and related content about ${query}.`,
-    },
-    {
-      title: `Latest News about ${query}`,
-      url: `https://news.google.com/search?q=${encodeURIComponent(query)}`,
-      description: `Get the latest news and updates about ${query}. Breaking stories, analysis, and in-depth coverage.`,
-    },
-    {
-      title: `${query} - Official Website`,
-      url: `https://www.${query.toLowerCase().replace(/\s+/g, '')}.com`,
-      description: `Visit the official website for ${query}. Find official information, products, and services.`,
-    },
-    {
-      title: `${query} Videos and Highlights`,
-      url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
-      description: `Watch videos about ${query}. Highlights, tutorials, interviews, and more content.`,
-    },
-    {
-      title: `${query} on Social Media`,
-      url: `https://twitter.com/search?q=${encodeURIComponent(query)}`,
-      description: `See what people are saying about ${query}. Latest tweets, trends, and discussions.`,
-    },
-  ];
-  return results;
-};
+const colorOptions = [
+  { value: "red", label: "Red", hex: "#ef4444" },
+  { value: "blue", label: "Blue", hex: "#3b82f6" },
+  { value: "green", label: "Green", hex: "#22c55e" },
+  { value: "yellow", label: "Yellow", hex: "#eab308" },
+  { value: "purple", label: "Purple", hex: "#a855f7" },
+  { value: "orange", label: "Orange", hex: "#f97316" },
+];
 
 const formVariants = {
   hidden: { opacity: 0 },
@@ -67,50 +47,47 @@ const inputVariants = {
   },
 };
 
-const resultVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: {
-      delay: i * 0.1,
-      type: "spring" as const,
-      stiffness: 100,
-    },
-  }),
-};
-
-const SearchPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+const AgeColorPage = () => {
+  const [formData, setFormData] = useState<FormData>({
+    firstName: "",
+    lastName: "",
+    age: "",
+    favoriteColor: "red",
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [showResult, setShowResult] = useState(false);
+  const [submittedData, setSubmittedData] = useState<FormData | null>(null);
 
-  const handleFetch = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!searchQuery.trim()) {
+    if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.age.trim()) {
       return;
     }
 
     setIsLoading(true);
-    setHasSearched(false);
     
-    // Simulate servlet processing delay
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    // Simulate servlet processing delay (like AgeColorServlet.java)
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    // Generate mock results based on query
-    const results = generateMockResults(searchQuery);
-    setSearchResults(results);
-    setHasSearched(true);
+    setSubmittedData(formData);
+    setShowResult(true);
     setIsLoading(false);
   };
 
   const resetForm = () => {
-    setSearchQuery("");
-    setSearchResults([]);
-    setHasSearched(false);
+    setFormData({
+      firstName: "",
+      lastName: "",
+      age: "",
+      favoriteColor: "red",
+    });
+    setShowResult(false);
+    setSubmittedData(null);
   };
+
+  const selectedColor = colorOptions.find(c => c.value === formData.favoriteColor);
+  const resultColor = colorOptions.find(c => c.value === submittedData?.favoriteColor);
 
   return (
     <motion.div
@@ -119,7 +96,7 @@ const SearchPage = () => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
     >
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-md">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -151,129 +128,227 @@ const SearchPage = () => {
                 <CardTitle className="text-2xl text-white">Assignment 2</CardTitle>
               </motion.div>
               <CardDescription className="text-slate-400">
-                Search Simulation - Displays Results (Simulates sendRedirect)
+                Age & Favorite Color Validator
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <motion.form
-                onSubmit={handleFetch}
-                className="space-y-6"
-                variants={formVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <motion.div className="space-y-2" variants={inputVariants}>
-                  <Label htmlFor="search" className="text-slate-200">
-                    Search Query
-                  </Label>
-                  <div className="relative">
-                    <motion.div
-                      className="absolute left-3 top-1/2 -translate-y-1/2"
-                      animate={isLoading ? { rotate: 360 } : { rotate: 0 }}
-                      transition={isLoading ? { duration: 1, repeat: Infinity, ease: "linear" } : {}}
-                    >
-                      <Search className="w-4 h-4 text-slate-500" />
-                    </motion.div>
-                    <Input
-                      id="search"
-                      type="text"
-                      placeholder="Enter search term..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 pl-10 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20"
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
-                </motion.div>
-
-                <motion.div className="flex gap-3" variants={inputVariants}>
-                  <Button
-                    type="submit"
-                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/25"
-                    disabled={!searchQuery.trim() || isLoading}
+              <AnimatePresence mode="wait">
+                {!showResult ? (
+                  <motion.form
+                    key="form"
+                    onSubmit={handleSubmit}
+                    className="space-y-5"
+                    variants={formVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit={{ opacity: 0, x: -20 }}
                   >
-                    {isLoading ? (
-                      <motion.div
-                        className="flex items-center gap-2"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                    {/* First Name */}
+                    <motion.div className="space-y-2" variants={inputVariants}>
+                      <Label htmlFor="firstName" className="text-slate-200 flex items-center gap-2">
+                        <User className="w-4 h-4 text-slate-400" />
+                        First Name
+                      </Label>
+                      <Input
+                        id="firstName"
+                        type="text"
+                        placeholder="Enter first name..."
+                        value={formData.firstName}
+                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                        className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20"
+                        required
+                        disabled={isLoading}
+                      />
+                    </motion.div>
+
+                    {/* Last Name */}
+                    <motion.div className="space-y-2" variants={inputVariants}>
+                      <Label htmlFor="lastName" className="text-slate-200 flex items-center gap-2">
+                        <User className="w-4 h-4 text-slate-400" />
+                        Last Name
+                      </Label>
+                      <Input
+                        id="lastName"
+                        type="text"
+                        placeholder="Enter last name..."
+                        value={formData.lastName}
+                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                        className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20"
+                        required
+                        disabled={isLoading}
+                      />
+                    </motion.div>
+
+                    {/* Age */}
+                    <motion.div className="space-y-2" variants={inputVariants}>
+                      <Label htmlFor="age" className="text-slate-200 flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-slate-400" />
+                        Age
+                      </Label>
+                      <Input
+                        id="age"
+                        type="number"
+                        min="1"
+                        max="150"
+                        placeholder="Enter age..."
+                        value={formData.age}
+                        onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                        className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20"
+                        required
+                        disabled={isLoading}
+                      />
+                    </motion.div>
+
+                    {/* Favorite Color */}
+                    <motion.div className="space-y-2" variants={inputVariants}>
+                      <Label htmlFor="color" className="text-slate-200 flex items-center gap-2">
+                        <Palette className="w-4 h-4 text-slate-400" />
+                        Favorite Color
+                      </Label>
+                      <Select
+                        value={formData.favoriteColor}
+                        onValueChange={(value) => setFormData({ ...formData, favoriteColor: value })}
+                        disabled={isLoading}
                       >
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Fetching Results...
-                      </motion.div>
-                    ) : (
-                      <>
-                        <Globe className="w-4 h-4 mr-2" />
-                        Fetch Results
-                      </>
-                    )}
-                  </Button>
-                  {hasSearched && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                    >
+                        <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white focus:ring-emerald-500">
+                          <SelectValue placeholder="Select a color" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-slate-800 border-slate-600">
+                          {colorOptions.map((color) => (
+                            <SelectItem 
+                              key={color.value} 
+                              value={color.value}
+                              className="text-white hover:bg-slate-700 focus:bg-slate-700"
+                            >
+                              <div className="flex items-center gap-2">
+                                <div 
+                                  className="w-4 h-4 rounded-full border border-slate-500"
+                                  style={{ backgroundColor: color.hex }}
+                                />
+                                {color.label}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {selectedColor && (
+                        <motion.div 
+                          className="flex items-center gap-2 text-xs text-slate-400"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                        >
+                          <div 
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: selectedColor.hex }}
+                          />
+                          Selected: {selectedColor.label}
+                        </motion.div>
+                      )}
+                    </motion.div>
+
+                    {/* Submit Button */}
+                    <motion.div variants={inputVariants}>
                       <Button
-                        type="button"
-                        variant="outline"
-                        onClick={resetForm}
-                        className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                        type="submit"
+                        className="w-full bg-emerald-600 hover:bg-emerald-700 transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/25"
+                        disabled={!formData.firstName.trim() || !formData.lastName.trim() || !formData.age.trim() || isLoading}
                       >
-                        <RotateCcw className="w-4 h-4" />
+                        {isLoading ? (
+                          <motion.div
+                            className="flex items-center gap-2"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                          >
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Processing...
+                          </motion.div>
+                        ) : (
+                          <>
+                            <Send className="w-4 h-4 mr-2" />
+                            Submit
+                          </>
+                        )}
                       </Button>
                     </motion.div>
-                  )}
-                </motion.div>
-              </motion.form>
-
-              {/* Search Results */}
-              <AnimatePresence>
-                {hasSearched && searchResults.length > 0 && (
+                  </motion.form>
+                ) : (
+                  /* Result Display (simulating result.jsp) */
                   <motion.div
-                    className="mt-6 space-y-3"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    key="result"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-4"
                   >
                     <motion.div
-                      className="flex items-center gap-2 text-emerald-400 mb-4"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      className="text-center mb-6"
+                      initial={{ scale: 0.8 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200 }}
                     >
-                      <ExternalLink className="w-4 h-4" />
-                      <span className="text-sm font-medium">
-                        Showing {searchResults.length} results for "{searchQuery}"
-                      </span>
+                      <h3 className="text-lg font-semibold text-emerald-400 mb-2">
+                        ✅ Form Submitted Successfully!
+                      </h3>
+                      <p className="text-xs text-slate-400">
+                        Displaying result.jsp (forwarded from AgeColorServlet)
+                      </p>
                     </motion.div>
 
-                    {searchResults.map((result, index) => (
-                      <motion.div
-                        key={index}
-                        custom={index}
-                        variants={resultVariants}
-                        initial="hidden"
-                        animate="visible"
-                        className="p-4 bg-slate-900/50 rounded-lg border border-slate-700 hover:border-emerald-500/50 transition-all duration-200 hover:bg-slate-900/70 group"
+                    <motion.div
+                      className="p-4 rounded-lg border-2"
+                      style={{ 
+                        backgroundColor: `${resultColor?.hex}15`,
+                        borderColor: `${resultColor?.hex}50`
+                      }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center py-2 border-b border-slate-700">
+                          <span className="text-slate-400 text-sm">First Name:</span>
+                          <span className="text-white font-medium">{submittedData?.firstName}</span>
+                        </div>
+                        <div className="flex justify-between items-center py-2 border-b border-slate-700">
+                          <span className="text-slate-400 text-sm">Last Name:</span>
+                          <span className="text-white font-medium">{submittedData?.lastName}</span>
+                        </div>
+                        <div className="flex justify-between items-center py-2 border-b border-slate-700">
+                          <span className="text-slate-400 text-sm">Age:</span>
+                          <span className="text-white font-medium">{submittedData?.age} years old</span>
+                        </div>
+                        <div className="flex justify-between items-center py-2">
+                          <span className="text-slate-400 text-sm">Favorite Color:</span>
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-5 h-5 rounded-full border border-white/30"
+                              style={{ backgroundColor: resultColor?.hex }}
+                            />
+                            <span 
+                              className="font-medium"
+                              style={{ color: resultColor?.hex }}
+                            >
+                              {resultColor?.label}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      <Button
+                        onClick={resetForm}
+                        variant="outline"
+                        className="w-full border-slate-600 text-slate-300 hover:bg-slate-700 transition-all duration-200"
                       >
-                        <a
-                          href={result.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block"
-                        >
-                          <h3 className="text-blue-400 hover:text-blue-300 font-medium text-sm group-hover:underline">
-                            {result.title}
-                          </h3>
-                          <p className="text-emerald-500 text-xs mt-1 truncate">
-                            {result.url}
-                          </p>
-                          <p className="text-slate-400 text-xs mt-2 line-clamp-2">
-                            {result.description}
-                          </p>
-                        </a>
-                      </motion.div>
-                    ))}
+                        <RotateCcw className="w-4 h-4 mr-2" />
+                        Submit Another Form
+                      </Button>
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -285,12 +360,21 @@ const SearchPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <p className="text-xs text-slate-500 mb-2 font-medium">Equivalent Servlet Logic:</p>
+                <p className="text-xs text-slate-500 mb-2 font-medium">AgeColorServlet.java Logic:</p>
                 <pre className="text-xs text-slate-400 overflow-x-auto">
-{`String query = request.getParameter("q");
-String url = "https://www.google.com/search?q=" 
-  + URLEncoder.encode(query, "UTF-8");
-response.sendRedirect(url);`}
+{`String firstName = request.getParameter("firstName");
+String lastName = request.getParameter("lastName");
+String age = request.getParameter("age");
+String color = request.getParameter("color");
+
+request.setAttribute("firstName", firstName);
+request.setAttribute("lastName", lastName);
+request.setAttribute("age", age);
+request.setAttribute("color", color);
+
+RequestDispatcher rd = request
+  .getRequestDispatcher("result.jsp");
+rd.forward(request, response);`}
                 </pre>
               </motion.div>
 
@@ -303,8 +387,9 @@ response.sendRedirect(url);`}
               >
                 <p className="text-xs text-blue-300 font-medium mb-1">Key Concept:</p>
                 <p className="text-xs text-slate-400">
-                  <code className="text-blue-400">sendRedirect()</code> sends an HTTP 302 response,
-                  causing the browser to navigate to a new URL. Here we simulate displaying results instead.
+                  <code className="text-blue-400">RequestDispatcher.forward()</code> forwards the request 
+                  internally to another resource (like result.jsp). Unlike sendRedirect, 
+                  the URL in the browser doesn't change.
                 </p>
               </motion.div>
             </CardContent>
@@ -315,4 +400,4 @@ response.sendRedirect(url);`}
   );
 };
 
-export default SearchPage;
+export default AgeColorPage;
