@@ -115,16 +115,16 @@ const GoogleSearchPage = () => {
                     animate="visible"
                     exit={{ opacity: 0, x: -20 }}
                   >
-                    {/* Name Input */}
+                    {/* Search Input */}
                     <motion.div className="space-y-2" variants={inputVariants}>
-                      <Label htmlFor="name" className="text-slate-200 flex items-center gap-2">
+                      <Label htmlFor="searchQuery" className="text-slate-200 flex items-center gap-2">
                         <Globe className="w-4 h-4 text-slate-400" />
-                        Enter Your Name:
+                        Enter search query:
                       </Label>
                       <Input
-                        id="name"
+                        id="searchQuery"
                         type="text"
-                        placeholder="Enter your name..."
+                        placeholder="Enter anything to search on Google..."
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20"
