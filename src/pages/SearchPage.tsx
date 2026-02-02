@@ -44,13 +44,22 @@ const GoogleSearchPage = () => {
     }
 
     setIsLoading(true);
+
+     // IMPORTANT: Open the tab immediately (within the user gesture) so the browser
+     // doesn't block it after the async delay.
+     const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(name)}`;
+     const newTab = window.open("about:blank", "_blank", "noopener,noreferrer");
     
     // Simulate servlet processing delay (like GoogleSearchServlet.java)
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     // Automatically redirect to Google (simulating sendRedirect)
-    const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(name)}`;
-    window.open(googleUrl, '_blank');
+    if (newTab && !newTab.closed) {
+      newTab.location.href = googleUrl;
+    } else {
+      // Fallback if the popup was blocked for any reason
+      window.location.href = googleUrl;
+    }
     
     setIsLoading(false);
   };
