@@ -5,24 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Send, Loader2, RotateCcw, User, Palette, Calendar } from "lucide-react";
-
-interface FormData {
-  firstName: string;
-  lastName: string;
-  age: string;
-  favoriteColor: string;
-}
-
-const colorOptions = [
-  { value: "red", label: "Red", hex: "#ef4444" },
-  { value: "blue", label: "Blue", hex: "#3b82f6" },
-  { value: "green", label: "Green", hex: "#22c55e" },
-  { value: "yellow", label: "Yellow", hex: "#eab308" },
-  { value: "purple", label: "Purple", hex: "#a855f7" },
-  { value: "orange", label: "Orange", hex: "#f97316" },
-];
+import { ArrowLeft, Search, Loader2, RotateCcw, ExternalLink, Globe } from "lucide-react";
 
 const formVariants = {
   hidden: { opacity: 0 },
@@ -47,47 +30,36 @@ const inputVariants = {
   },
 };
 
-const AgeColorPage = () => {
-  const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
-    age: "",
-    favoriteColor: "red",
-  });
+const GoogleSearchPage = () => {
+  const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showResult, setShowResult] = useState(false);
-  const [submittedData, setSubmittedData] = useState<FormData | null>(null);
+  const [searchedName, setSearchedName] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.age.trim()) {
+    if (!name.trim()) {
       return;
     }
 
     setIsLoading(true);
     
-    // Simulate servlet processing delay (like AgeColorServlet.java)
+    // Simulate servlet processing delay (like GoogleSearchServlet.java)
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    setSubmittedData(formData);
+    setSearchedName(name);
     setShowResult(true);
     setIsLoading(false);
   };
 
   const resetForm = () => {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      age: "",
-      favoriteColor: "red",
-    });
+    setName("");
     setShowResult(false);
-    setSubmittedData(null);
+    setSearchedName("");
   };
 
-  const selectedColor = colorOptions.find(c => c.value === formData.favoriteColor);
-  const resultColor = colorOptions.find(c => c.value === submittedData?.favoriteColor);
+  const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchedName)}`;
 
   return (
     <motion.div
@@ -128,7 +100,7 @@ const AgeColorPage = () => {
                 <CardTitle className="text-2xl text-white">Assignment 2</CardTitle>
               </motion.div>
               <CardDescription className="text-slate-400">
-                Age & Favorite Color Validator
+                Search Your Name on Google
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -143,107 +115,22 @@ const AgeColorPage = () => {
                     animate="visible"
                     exit={{ opacity: 0, x: -20 }}
                   >
-                    {/* First Name */}
+                    {/* Name Input */}
                     <motion.div className="space-y-2" variants={inputVariants}>
-                      <Label htmlFor="firstName" className="text-slate-200 flex items-center gap-2">
-                        <User className="w-4 h-4 text-slate-400" />
-                        First Name
+                      <Label htmlFor="name" className="text-slate-200 flex items-center gap-2">
+                        <Globe className="w-4 h-4 text-slate-400" />
+                        Enter Your Name:
                       </Label>
                       <Input
-                        id="firstName"
+                        id="name"
                         type="text"
-                        placeholder="Enter first name..."
-                        value={formData.firstName}
-                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                        placeholder="Enter your name..."
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20"
                         required
                         disabled={isLoading}
                       />
-                    </motion.div>
-
-                    {/* Last Name */}
-                    <motion.div className="space-y-2" variants={inputVariants}>
-                      <Label htmlFor="lastName" className="text-slate-200 flex items-center gap-2">
-                        <User className="w-4 h-4 text-slate-400" />
-                        Last Name
-                      </Label>
-                      <Input
-                        id="lastName"
-                        type="text"
-                        placeholder="Enter last name..."
-                        value={formData.lastName}
-                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                        className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20"
-                        required
-                        disabled={isLoading}
-                      />
-                    </motion.div>
-
-                    {/* Age */}
-                    <motion.div className="space-y-2" variants={inputVariants}>
-                      <Label htmlFor="age" className="text-slate-200 flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-slate-400" />
-                        Age
-                      </Label>
-                      <Input
-                        id="age"
-                        type="number"
-                        min="1"
-                        max="150"
-                        placeholder="Enter age..."
-                        value={formData.age}
-                        onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                        className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-emerald-500 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20"
-                        required
-                        disabled={isLoading}
-                      />
-                    </motion.div>
-
-                    {/* Favorite Color */}
-                    <motion.div className="space-y-2" variants={inputVariants}>
-                      <Label htmlFor="color" className="text-slate-200 flex items-center gap-2">
-                        <Palette className="w-4 h-4 text-slate-400" />
-                        Favorite Color
-                      </Label>
-                      <Select
-                        value={formData.favoriteColor}
-                        onValueChange={(value) => setFormData({ ...formData, favoriteColor: value })}
-                        disabled={isLoading}
-                      >
-                        <SelectTrigger className="bg-slate-700/50 border-slate-600 text-white focus:ring-emerald-500">
-                          <SelectValue placeholder="Select a color" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-slate-800 border-slate-600">
-                          {colorOptions.map((color) => (
-                            <SelectItem 
-                              key={color.value} 
-                              value={color.value}
-                              className="text-white hover:bg-slate-700 focus:bg-slate-700"
-                            >
-                              <div className="flex items-center gap-2">
-                                <div 
-                                  className="w-4 h-4 rounded-full border border-slate-500"
-                                  style={{ backgroundColor: color.hex }}
-                                />
-                                {color.label}
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      {selectedColor && (
-                        <motion.div 
-                          className="flex items-center gap-2 text-xs text-slate-400"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          <div 
-                            className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: selectedColor.hex }}
-                          />
-                          Selected: {selectedColor.label}
-                        </motion.div>
-                      )}
                     </motion.div>
 
                     {/* Submit Button */}
@@ -251,7 +138,7 @@ const AgeColorPage = () => {
                       <Button
                         type="submit"
                         className="w-full bg-emerald-600 hover:bg-emerald-700 transition-all duration-200 hover:shadow-lg hover:shadow-emerald-500/25"
-                        disabled={!formData.firstName.trim() || !formData.lastName.trim() || !formData.age.trim() || isLoading}
+                        disabled={!name.trim() || isLoading}
                       >
                         {isLoading ? (
                           <motion.div
@@ -264,15 +151,15 @@ const AgeColorPage = () => {
                           </motion.div>
                         ) : (
                           <>
-                            <Send className="w-4 h-4 mr-2" />
-                            Submit
+                            <Search className="w-4 h-4 mr-2" />
+                            Search
                           </>
                         )}
                       </Button>
                     </motion.div>
                   </motion.form>
                 ) : (
-                  /* Result Display (simulating result.jsp) */
+                  /* Result Display (simulating redirect to Google) */
                   <motion.div
                     key="result"
                     initial={{ opacity: 0, x: 20 }}
@@ -287,52 +174,58 @@ const AgeColorPage = () => {
                       transition={{ type: "spring", stiffness: 200 }}
                     >
                       <h3 className="text-lg font-semibold text-emerald-400 mb-2">
-                        ✅ Form Submitted Successfully!
+                        ✅ Redirecting to Google Search!
                       </h3>
                       <p className="text-xs text-slate-400">
-                        Displaying result.jsp (forwarded from AgeColorServlet)
+                        Using sendRedirect() to Google
                       </p>
                     </motion.div>
 
                     <motion.div
-                      className="p-4 rounded-lg border-2"
-                      style={{ 
-                        backgroundColor: `${resultColor?.hex}15`,
-                        borderColor: `${resultColor?.hex}50`
-                      }}
+                      className="p-4 rounded-lg border-2 bg-blue-500/10 border-blue-500/30"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1 }}
                     >
                       <div className="space-y-3">
                         <div className="flex justify-between items-center py-2 border-b border-slate-700">
-                          <span className="text-slate-400 text-sm">First Name:</span>
-                          <span className="text-white font-medium">{submittedData?.firstName}</span>
+                          <span className="text-slate-400 text-sm">Search Query:</span>
+                          <span className="text-white font-medium">{searchedName}</span>
                         </div>
-                        <div className="flex justify-between items-center py-2 border-b border-slate-700">
-                          <span className="text-slate-400 text-sm">Last Name:</span>
-                          <span className="text-white font-medium">{submittedData?.lastName}</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2 border-b border-slate-700">
-                          <span className="text-slate-400 text-sm">Age:</span>
-                          <span className="text-white font-medium">{submittedData?.age} years old</span>
-                        </div>
-                        <div className="flex justify-between items-center py-2">
-                          <span className="text-slate-400 text-sm">Favorite Color:</span>
-                          <div className="flex items-center gap-2">
-                            <div 
-                              className="w-5 h-5 rounded-full border border-white/30"
-                              style={{ backgroundColor: resultColor?.hex }}
-                            />
-                            <span 
-                              className="font-medium"
-                              style={{ color: resultColor?.hex }}
-                            >
-                              {resultColor?.label}
-                            </span>
-                          </div>
+                        <div className="py-2">
+                          <span className="text-slate-400 text-sm block mb-2">Redirect URL:</span>
+                          <a 
+                            href={googleSearchUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300 text-sm break-all flex items-center gap-2 transition-colors"
+                          >
+                            <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                            {googleSearchUrl}
+                          </a>
                         </div>
                       </div>
+                    </motion.div>
+
+                    {/* Open in Google Button */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <a 
+                        href={googleSearchUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Button
+                          className="w-full bg-blue-600 hover:bg-blue-700 transition-all duration-200"
+                        >
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          Open in Google
+                        </Button>
+                      </a>
                     </motion.div>
 
                     <motion.div
@@ -346,7 +239,7 @@ const AgeColorPage = () => {
                         className="w-full border-slate-600 text-slate-300 hover:bg-slate-700 transition-all duration-200"
                       >
                         <RotateCcw className="w-4 h-4 mr-2" />
-                        Submit Another Form
+                        Search Again
                       </Button>
                     </motion.div>
                   </motion.div>
@@ -360,21 +253,13 @@ const AgeColorPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <p className="text-xs text-slate-500 mb-2 font-medium">AgeColorServlet.java Logic:</p>
+                <p className="text-xs text-slate-500 mb-2 font-medium">GoogleSearchServlet.java Logic:</p>
                 <pre className="text-xs text-slate-400 overflow-x-auto">
-{`String firstName = request.getParameter("firstName");
-String lastName = request.getParameter("lastName");
-String age = request.getParameter("age");
-String color = request.getParameter("color");
+{`String name = request.getParameter("name");
+String googleUrl = "https://www.google.com/search?q=" 
+                   + name;
 
-request.setAttribute("firstName", firstName);
-request.setAttribute("lastName", lastName);
-request.setAttribute("age", age);
-request.setAttribute("color", color);
-
-RequestDispatcher rd = request
-  .getRequestDispatcher("result.jsp");
-rd.forward(request, response);`}
+response.sendRedirect(googleUrl);`}
                 </pre>
               </motion.div>
 
@@ -387,9 +272,8 @@ rd.forward(request, response);`}
               >
                 <p className="text-xs text-blue-300 font-medium mb-1">Key Concept:</p>
                 <p className="text-xs text-slate-400">
-                  <code className="text-blue-400">RequestDispatcher.forward()</code> forwards the request 
-                  internally to another resource (like result.jsp). Unlike sendRedirect, 
-                  the URL in the browser doesn't change.
+                  <code className="text-blue-400">response.sendRedirect()</code> sends a redirect 
+                  response to the browser, causing it to navigate to a new URL (Google search in this case).
                 </p>
               </motion.div>
             </CardContent>
@@ -400,4 +284,4 @@ rd.forward(request, response);`}
   );
 };
 
-export default AgeColorPage;
+export default GoogleSearchPage;
