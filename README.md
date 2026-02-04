@@ -36,6 +36,16 @@ cd SearchServlet_Project
 mvn clean package
 mvn tomcat7:run
 ```
+## SearchServlet Application Demo
+
+### Application Interface:
+The SearchServlet provides a clean and simple web interface for users to enter search queries. Below is the main search page:
+![image alt](https://github.com/Alain296/MugaboAlain_26450/blob/e7ccab35c32bdf7607467bc2353bf8d0d44edc57/howmany.png)
+
+### Search Functionality:
+When a user enters a search query and clicks "Fetch", the servlet redirects to Google with the search term. Here's an example of the redirect in action:
+![image alt](https://github.com/Alain296/MugaboAlain_26450/blob/e7ccab35c32bdf7607467bc2353bf8d0d44edc57/googlepic.png)
+
 
 ## Notes
 - Both projects are independent and can be run simultaneously on different ports
