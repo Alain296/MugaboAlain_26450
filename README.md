@@ -18,7 +18,10 @@ The main login interface with username and password input fields. Users can ente
 ### Login Form
 The main login interface with username and password input fields. Users can enter their credentials and click the Login button to authenticate.
 ![image alt](https://github.com/Alain296/MugaboAlain_26450/blob/5ed7771d448a16ba4c35bcbd5975e3d64b779c64/loginInsertioncredential.png)
+### Successful Login
+After entering valid credentials with a strong password (8+ characters), users see a success message with a personalized welcome and option to try again.
 
+![image](https://github.com/Alain296/MugaboAlain_26450/blob/8e786bd637052942461a368c22d7694bab6d9c96/Loginsuccessfully.png)
 ## 2. SearchServlet  
 - **Location**: `SearchServlet_Project/`
 - **Purpose**: Handles search queries and redirects to Google
