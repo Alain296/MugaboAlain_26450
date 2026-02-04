@@ -13,6 +13,11 @@ cd LoginServlet
 mvn clean package
 mvn tomcat7:run
 ```
+### Login Form
+The main login interface with username and password input fields. Users can enter their credentials and click the Login button to authenticate.
+### Login Form
+The main login interface with username and password input fields. Users can enter their credentials and click the Login button to authenticate.
+![image alt](https://github.com/Alain296/MugaboAlain_26450/blob/5ed7771d448a16ba4c35bcbd5975e3d64b779c64/loginInsertioncredential.png)
 
 ## 2. SearchServlet  
 - **Location**: `SearchServlet_Project/`
