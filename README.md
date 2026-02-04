@@ -21,7 +21,10 @@ The main login interface with username and password input fields. Users can ente
 ### Successful Login
 After entering valid credentials with a strong password (8+ characters), users see a success message with a personalized welcome and option to try again.
 
-![image](https://github.com/Alain296/MugaboAlain_26450/blob/8e786bd637052942461a368c22d7694bab6d9c96/Loginsuccessfully.png)
+![image alt](https://github.com/Alain296/MugaboAlain_26450/blob/8e786bd637052942461a368c22d7694bab6d9c96/Loginsuccessfully.png)
+## login failed
+After entering less (characters under 8) user receives message your password is weak ,Try again strong one 
+![image alt](https://github.com/Alain296/MugaboAlain_26450/blob/1575965c96253c06ff3c069318440ca8b678590a/validationresultpasswordweak.png)
 ## 2. SearchServlet  
 - **Location**: `SearchServlet_Project/`
 - **Purpose**: Handles search queries and redirects to Google
