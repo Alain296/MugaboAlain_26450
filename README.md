@@ -1,4 +1,4 @@
-CRUD REST API – Byiringiro Bailly (26593)
+CRUD REST API – Mugabo Alain (26450)
 Student Information
 Name: Mugabo Alain
 Registration Number: 26450
