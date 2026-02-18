@@ -1,7 +1,7 @@
 # CRUD REST API 
 
-## Name: Byiringiro Bailly
-## ID: 26593
+## Name: Mugabo Alain
+## ID: 26450
 
 # Project Description
 
@@ -16,7 +16,7 @@ This project is a RESTful CRUD API developed using Java Spring Boot. The applica
 The controller class inside the 'controller' package handles all HTTP requests, while the repository layer (JpaRepository) manages database interactions. Therefore, the project fully satisfies the requirements of a CRUD REST API.
 
 ## Technologies Used
-- 	Java 17
+- 	Java 21
 - 	Spring Boot
 - 	Spring Web
 - 	Spring Data JPA
